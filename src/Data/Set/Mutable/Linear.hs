@@ -40,14 +40,14 @@ type Keyed a = Linear.Keyed a
 -- # Constructors and Mutators
 -------------------------------------------------------------------------------
 
-singleton :: Keyed a => a -> (Set a #-> Unrestricted b) -> Unrestricted b
+singleton :: Keyed a => a -> (Set a #-> Unrestricted b) -> b
 singleton a (f :: Set a #-> Unrestricted b) = Linear.singleton (a,()) f'
   where
     f' :: Linear.HashMap a () #-> Unrestricted b
     f' hmap = f (Set hmap)
 
 fromList :: HasCallStack =>
-  Keyed a => [a] -> (Set a #-> Unrestricted b) -> Unrestricted b
+  Keyed a => [a] -> (Set a #-> Unrestricted b) -> b
 fromList [] _ = error "Creating a set from an empty list"
 fromList (x:xs) f = singleton x (f Linear.. insertAll xs)
   where

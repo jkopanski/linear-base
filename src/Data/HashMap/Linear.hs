@@ -100,11 +100,14 @@ data RobinQuery k where
 -- # Construction and Modification
 --------------------------------------------------
 
+--empty :: Keyed k => (HashMap k v #-> Unrestricted b) -> b
+--empty 
+
 -- | Run a computation using a singleton hashmap
 singleton :: Keyed k =>
-  (k, v) -> (HashMap k v #-> Unrestricted b) -> Unrestricted b
+  (k, v) -> (HashMap k v #-> Unrestricted b) -> b
 singleton (k :: k, v :: v) (f :: HashMap k v #-> Unrestricted b) =
-  alloc defaultSize (k, v, -1) applyHM
+  unUnrestricted $ alloc defaultSize (k, v, -1) applyHM
   where
     applyHM :: Array (RobinVal k v) #-> Unrestricted b
     applyHM arr = let ixToHash = (hash k) `mod` defaultSize in
