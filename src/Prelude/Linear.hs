@@ -27,6 +27,7 @@ module Prelude.Linear
     ($)
   , (<*)
   , foldr
+  , foldl
   , const
   , id
   , seq
@@ -74,6 +75,7 @@ import Prelude hiding
   , uncurry
   , flip
   , foldr
+  , foldl
   , (.)
   , maybe
   , either

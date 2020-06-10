@@ -56,3 +56,7 @@ foldr :: (a #-> b #-> b) -> b #-> [a] #-> b
 foldr f z = \case
   [] -> z
   x:xs -> f x (foldr f z xs)
+
+foldl :: (b #-> a -> b) -> b #-> [a] -> b
+foldl f b [] = b
+foldl f b (x:xs) = foldl f (f b x) xs
