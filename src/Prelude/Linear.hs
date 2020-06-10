@@ -25,6 +25,7 @@
 module Prelude.Linear
   ( -- * Standard Types, Classes and Related Functions
     ($)
+  , (&)
   , (<*)
   , foldr
   , foldl
@@ -68,6 +69,7 @@ import Data.Either.Linear
 import Data.Maybe.Linear
 import Prelude hiding
   ( ($)
+  , (&)
   , id
   , const
   , seq
