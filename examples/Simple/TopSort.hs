@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-name-shadowing #-}
+{-# OPTIONS_GHC -Wno-unused-matches #-}
 {-# LANGUAGE LinearTypes #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE LambdaCase #-}
@@ -17,14 +19,17 @@ import qualified Data.Functor.Linear as Data
 
 ------------------------------
 
+test1 :: [Int]
 test1 = topsort
   [(1,[2,3]), (2, [4]), (3,[4]), (4,[])]
 -- [1,2,3,4]
 
+test2 :: [Int]
 test2 = topsort
   [(5,[2,0]), (4,[0,1]), (0,[]), (2,[3]), (3,[1]), (1,[])]
 -- [5,2,3,4,0,1]
 
+test3 :: [Int]
 test3 = topsort
   [ (1,[2]), (2,[4,5]), (3,[9,7]), (4,[7,8,10]), (5,[10]), (6,[10])
   , (7,[]),(8,[]),(9,[]),(10,[])

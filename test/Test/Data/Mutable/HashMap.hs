@@ -65,7 +65,7 @@ testOnAnyHM propHmtest = property $ do
   let randHM = makeHM kvs
   hmtest <- propHmtest
   let test = hmtest Linear.. randHM
-  assert $ unUnrestricted Linear.$ HashMap.singleton kv test
+  assert $ HashMap.singleton kv test
 
 testKVPairExists :: (Int, String) -> HMTest
 testKVPairExists (k, v) hmap =
@@ -76,7 +76,7 @@ testKVPairExists (k, v) hmap =
     fromLookup (Unrestricted (Just v')) = Unrestricted (v' == v)
 
 testKeyMember :: Int -> HMTest
-testKeyMember key hmap = getSnd Linear.$ HashMap.member hmap key
+testKeyMember key hmap = move Linear.$ getSnd Linear.$ HashMap.member hmap key
 
 testKeyNotMember :: Int -> HMTest
 testKeyNotMember key hmap = Linear.fmap Linear.not (testKeyMember key hmap)
@@ -93,9 +93,9 @@ testKeyMissing key hmap =
 testLookupUnchanged :: (HMap #-> HMap) -> Int -> HMTest
 testLookupUnchanged f k hmap = fromLookup (HashMap.lookup hmap k)
   where
-    fromLookup :: (HMap, Maybe String) #-> Unrestricted Bool
+    fromLookup :: (HMap, Unrestricted (Maybe String)) #-> Unrestricted Bool
     fromLookup (hmap', look1) =
-      compareMaybes (move look1) (getSnd Linear.$ HashMap.lookup (f hmap') k)
+      compareMaybes look1 (getSnd Linear.$ HashMap.lookup (f hmap') k)
 
 deleteKey :: Int -> HMap #-> HMap
 deleteKey key hmap = HashMap.delete hmap key
@@ -104,8 +104,8 @@ insertPair :: (Int, String) -> HMap #-> HMap
 insertPair (k, v) hmap = HashMap.insert hmap k v
 
 -- XXX: This is a terrible name
-getSnd :: (Consumable a, Movable b) => (a, b) #-> Unrestricted b
-getSnd (a, b) = lseq a (move b)
+getSnd :: Consumable a => (a, b) #-> b
+getSnd (a, b) = lseq a b
 
 compareMaybes :: Eq a =>
   Unrestricted (Maybe a) #->
@@ -148,7 +148,7 @@ lookupSing1 = property $ do
   k <- forAll key
   v <- forAll val
   let test = testKVPairExists (k, v)
-  assert $ unUnrestricted Linear.$ HashMap.singleton (k, v) test
+  assert $ HashMap.singleton (k, v) test
 
 lookupSing2 :: Property
 lookupSing2 = property $ do
@@ -156,7 +156,7 @@ lookupSing2 = property $ do
   v <- forAll val
   k' <- forAll $ Gen.filter (/= k) key
   let test = testKeyMissing k'
-  assert $ unUnrestricted Linear.$ HashMap.singleton (k, v) test
+  assert $ HashMap.singleton (k, v) test
 
 lookupInsert1 :: Property
 lookupInsert1 = testOnAnyHM $ do
@@ -221,6 +221,7 @@ checkSizeAfterInsert (k, v) hmap = withSize Linear.$ HashMap.size hmap
     withSize :: (HMap, Int) #-> Unrestricted Bool
     withSize (hmap, oldSize) =
       checkSize (move oldSize)
+        Linear.$ move
         Linear.$ getSnd
         Linear.$ HashMap.size
         Linear.$ HashMap.insert hmap k v
@@ -242,6 +243,7 @@ checkSizeAfterDelete key hmap = fromSize (HashMap.size hmap)
     fromSize :: (HMap, Int) #-> Unrestricted Bool
     fromSize (hmap, orgSize) =
       compSizes (move orgSize)
+        Linear.$ move
         Linear.$ getSnd
         Linear.$ HashMap.size (HashMap.delete hmap key)
     compSizes :: Unrestricted Int #-> Unrestricted Int #-> Unrestricted Bool

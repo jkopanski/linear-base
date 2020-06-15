@@ -69,7 +69,6 @@ import Data.Either.Linear
 import Data.Maybe.Linear
 import Prelude hiding
   ( ($)
-  , (&)
   , id
   , const
   , seq
