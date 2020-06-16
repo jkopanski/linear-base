@@ -65,7 +65,7 @@ testOnAnyHM propHmtest = property $ do
   let randHM = makeHM kvs
   hmtest <- propHmtest
   let test = hmtest Linear.. randHM
-  assert $ HashMap.singleton kv test
+  assert $ unUnrestricted Linear.$ HashMap.singleton kv test
 
 testKVPairExists :: (Int, String) -> HMTest
 testKVPairExists (k, v) hmap =
@@ -104,7 +104,7 @@ insertPair :: (Int, String) -> HMap #-> HMap
 insertPair (k, v) hmap = HashMap.insert hmap k v
 
 -- XXX: This is a terrible name
-getSnd :: Consumable a => (a, b) #-> b
+getSnd :: (Consumable a) => (a, b) #-> b
 getSnd (a, b) = lseq a b
 
 compareMaybes :: Eq a =>
@@ -148,7 +148,7 @@ lookupSing1 = property $ do
   k <- forAll key
   v <- forAll val
   let test = testKVPairExists (k, v)
-  assert $ HashMap.singleton (k, v) test
+  assert $ unUnrestricted Linear.$ HashMap.singleton (k, v) test
 
 lookupSing2 :: Property
 lookupSing2 = property $ do
@@ -156,7 +156,7 @@ lookupSing2 = property $ do
   v <- forAll val
   k' <- forAll $ Gen.filter (/= k) key
   let test = testKeyMissing k'
-  assert $ HashMap.singleton (k, v) test
+  assert $ unUnrestricted Linear.$ HashMap.singleton (k, v) test
 
 lookupInsert1 :: Property
 lookupInsert1 = testOnAnyHM $ do

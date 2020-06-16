@@ -99,6 +99,7 @@ test-suite examples
   build-depends:
     base,
     hspec,
+    HUnit,
     linear-base,
     QuickCheck,
     storable-tuple,

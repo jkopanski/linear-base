@@ -24,6 +24,7 @@ module Data.HashMap.Linear
     HashMap,
     -- * Run a computation using a 'HashMap'
     singleton,
+    singleton',
     -- * Modifiers and Constructors
     alter,
     insert,
@@ -100,17 +101,19 @@ data RobinQuery k where
 -- # Construction and Modification
 --------------------------------------------------
 
-
-
 -- | Run a computation using a singleton hashmap
 singleton :: Keyed k =>
-  (k, v) -> (HashMap k v #-> Unrestricted b) -> b
+  (k, v) -> (HashMap k v #-> Unrestricted b) -> Unrestricted b
 singleton (k :: k, v :: v) (f :: HashMap k v #-> Unrestricted b) =
-  unUnrestricted $ alloc defaultSize (k, v, -1) applyHM
+  alloc defaultSize (k, v, -1) applyHM
   where
     applyHM :: Array (RobinVal k v) #-> Unrestricted b
     applyHM arr = let ixToHash = (hash k) `mod` defaultSize in
       f $ HashMap (defaultSize, 1) (write arr ixToHash (k, v, 0))
+
+singleton' :: Keyed k =>
+  (k, v) -> (HashMap k v #-> Unrestricted b) -> b
+singleton' kv f = unUnrestricted (singleton kv f)
 
 -- XXX: re-write linearly
 -- | Given a key @k@ to 'lookup', look up a @Maybe v@ and feed it to
@@ -229,8 +232,7 @@ member hmap k = memberFromQuery (queryIndex hmap k)
 lookup :: Keyed k => HashMap k v #-> k -> (HashMap k v, Unrestricted (Maybe v))
 lookup hmap k = (Unsafe.toLinear lookupFromIx) $ queryIndex hmap k
   where
-    lookupFromIx ::
-      (HashMap k v, RobinQuery k) -> (HashMap k v, Unrestricted (Maybe v))
+    lookupFromIx :: (HashMap k v, RobinQuery k) -> (HashMap k v, Unrestricted (Maybe v))
     lookupFromIx (h, IndexToInsert _ _) = (h, Unrestricted Nothing)
     lookupFromIx (h@(HashMap _ arr), IndexToUpdate _ ix) =
       case read arr ix of (_, (_, v, _)) -> (h, Unrestricted (Just v))

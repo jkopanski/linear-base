@@ -75,7 +75,7 @@ memberSing1 :: Property
 memberSing1 = property $ do
   val <- forAll value
   let tester = memberSingTest val
-  test $ Set.singleton val tester
+  test $ unUnrestricted Linear.$ Set.singleton val tester
 
 memberSingTest :: Int -> SetTester
 memberSingTest val set =
@@ -86,7 +86,7 @@ memberSing2 = property $ do
   val1 <- forAll value
   val2 <- forAll $ Gen.filter (/= val1) value
   let tester = memberSing2Test val2
-  test $ Set.singleton val1 tester
+  test $ unUnrestricted Linear.$ Set.singleton val1 tester
 
 memberSing2Test :: Int -> SetTester
 memberSing2Test val2 set =
@@ -97,7 +97,7 @@ memberInsert1 = property $ do
   val <- forAll value
   l <- forAll nonemptyList
   let tester = memberInsert1Test val
-  test $ Set.fromList l tester
+  test $ unUnrestricted Linear.$ Set.fromList l tester
 
 memberInsert1Test :: Int -> SetTester
 memberInsert1Test val set =
@@ -111,7 +111,7 @@ memberInsert2 = property $ do
   val2 <- forAll $ Gen.filter (/= val1) value
   l <- forAll nonemptyList
   let tester = memberInsert2Test val1 val2
-  test $ Set.fromList l tester
+  test $ unUnrestricted Linear.$ Set.fromList l tester
 
 memberInsert2Test :: Int -> Int -> SetTester
 memberInsert2Test val1 val2 set = fromRead (Set.member set val2)
@@ -127,7 +127,7 @@ memberDelete1 = property $ do
   val <- forAll value
   l <- forAll nonemptyList
   let tester = memberDelete1Test val
-  test $ Set.fromList l tester
+  test $ unUnrestricted Linear.$ Set.fromList l tester
 
 memberDelete1Test :: Int -> SetTester
 memberDelete1Test val set =
@@ -141,7 +141,7 @@ memberDelete2 = property $ do
   val2 <- forAll $ Gen.filter (/= val1) value
   l <- forAll nonemptyList
   let tester = memberDelete2Test val1 val2
-  test $ Set.fromList l tester
+  test $ unUnrestricted Linear.$ Set.fromList l tester
 
 memberDelete2Test :: Int -> Int -> SetTester
 memberDelete2Test val1 val2 set = fromRead (Set.member set val2)
@@ -155,7 +155,7 @@ memberDelete2Test val1 val2 set = fromRead (Set.member set val2)
 sizeSing :: Property
 sizeSing = property $ do
   val <- forAll value
-  test $ Set.singleton val sizeSingTest
+  test $ unUnrestricted Linear.$ Set.singleton val sizeSingTest
 
 sizeSingTest :: SetTester
 sizeSingTest set = testEqual (Unrestricted 1) (getSnd (Set.size set))
@@ -165,7 +165,7 @@ sizeInsert1 = property $ do
   l <- forAll nonemptyList
   val <- forAll $ Gen.filter (`elem` l) value
   let tester = sizeInsert1Test val
-  test $ Set.fromList l tester
+  test $ unUnrestricted Linear.$ Set.fromList l tester
 
 sizeInsert1Test :: Int -> SetTester
 sizeInsert1Test val set = fromRead (Set.size set)
@@ -181,7 +181,7 @@ sizeInsert2 = property $ do
   l <- forAll nonemptyList
   val <- forAll $ Gen.filter (not . (`elem` l)) value
   let tester = sizeInsert2Test val
-  test $ Set.fromList l tester
+  test $ unUnrestricted Linear.$ Set.fromList l tester
 
 sizeInsert2Test :: Int -> SetTester
 sizeInsert2Test val set = fromRead (Set.size set)
@@ -197,7 +197,7 @@ sizeDelete1 = property $ do
   l <- forAll nonemptyList
   val <- forAll $ Gen.filter (`elem` l) value
   let tester = sizeDelete1Test val
-  test $ Set.fromList l tester
+  test $ unUnrestricted Linear.$ Set.fromList l tester
 
 sizeDelete1Test :: Int -> SetTester
 sizeDelete1Test val set = fromRead (Set.size set)
@@ -213,7 +213,7 @@ sizeDelete2 = property $ do
   l <- forAll nonemptyList
   val <- forAll $ Gen.filter (not . (`elem` l)) value
   let tester = sizeDelete2Test val
-  test $ Set.fromList l tester
+  test $ unUnrestricted Linear.$ Set.fromList l tester
 
 sizeDelete2Test :: Int -> SetTester
 sizeDelete2Test val set = fromRead (Set.size set)
