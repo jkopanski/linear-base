@@ -1,4 +1,4 @@
 let
   hsPkgs = import ./default.nix {};
 in
-  hsPkgs.linear-base.components.all
+  hsPkgs.linear-base.components.library

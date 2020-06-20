@@ -5,11 +5,11 @@ let
   nixpkgs = import sources.nixpkgs haskellNix.nixpkgsArgs;
   haskell = nixpkgs.haskell-nix;
 
-in haskell.project {
-  projectFileName = "linear-base.cabal";
-  src = haskell.haskellLib.cleanGit {
-    name = "linear-base";
-    src = ./.;
+  pkgSet = haskell.mkCabalProjectPkgSet {
+    plan-pkgs = import ./pkgs.nix;
+    pkg-def-extras = [];
+    modules = [];
   };
-  compiler-nix-name = "ghcHEAD";
-}
+
+in
+pkgSet.config.hsPkgs

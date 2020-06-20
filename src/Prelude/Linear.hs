@@ -89,6 +89,7 @@ import Prelude hiding
   , Num(..)
   )
 import Prelude.Linear.Internal.Simple
+import GHC.Exts (FUN)
 
 -- XXX: temporary: with multiplicity polymorphism functions expecting a
 -- non-linear arrow would allow a linear arrow passed, so this would be
@@ -99,7 +100,7 @@ forget :: (a #-> b) #-> a -> b
 forget f x = f x
 
 -- | Replacement for the flip function with generalized multiplicities.
-flip :: (a -->.(p) b -->.(q) c) -->.(r) b -->.(q) a -->.(p) c
+flip :: FUN r (FUN p a (FUN q b c)) (FUN q b (FUN p a c))
 flip f b a = f a b
 
 -- | Linearly typed replacement for the standard '(Prelude.<*)' function.
