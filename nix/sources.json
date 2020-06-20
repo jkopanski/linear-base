@@ -1,0 +1,38 @@
+{
+    "haskell.nix": {
+        "branch": "ghcLinear",
+        "description": "Alternative Haskell Infrastructure for Nixpkgs",
+        "homepage": "https://input-output-hk.github.io/haskell.nix",
+        "owner": "jkopanski",
+        "repo": "haskell.nix",
+        "rev": "181f6b193938290ba98b101d6e2cd27050bf56a4",
+        "sha256": "1zjjvdql2srnw00i3plin8d33v5i8srn94crpj6938as7h4qan6z",
+        "type": "tarball",
+        "url": "https://github.com/jkopanski/haskell.nix/archive/181f6b193938290ba98b101d6e2cd27050bf56a4.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "niv": {
+        "branch": "master",
+        "description": "Easy dependency management for Nix projects",
+        "homepage": "https://github.com/nmattia/niv",
+        "owner": "nmattia",
+        "repo": "niv",
+        "rev": "f73bf8d584148677b01859677a63191c31911eae",
+        "sha256": "0jlmrx633jvqrqlyhlzpvdrnim128gc81q5psz2lpp2af8p8q9qs",
+        "type": "tarball",
+        "url": "https://github.com/nmattia/niv/archive/f73bf8d584148677b01859677a63191c31911eae.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs": {
+        "branch": "linear-types",
+        "description": "A read-only mirror of NixOS/nixpkgs tracking the released channels. Send issues and PRs to",
+        "homepage": "https://github.com/NixOS/nixpkgs",
+        "owner": "jkopanski",
+        "repo": "nixpkgs",
+        "rev": "cd7894fe4273f0a3ff4fcf37eba428ed6d49b443",
+        "sha256": "0dhpi3h6pp1accniff8fmbmxfw3syxlnqpkc9g8igl2f7dy3s45b",
+        "type": "tarball",
+        "url": "https://github.com/jkopanski/nixpkgs/archive/cd7894fe4273f0a3ff4fcf37eba428ed6d49b443.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}

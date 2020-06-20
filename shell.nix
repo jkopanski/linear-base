@@ -1,15 +1,4 @@
-with import ./nixpkgs.nix {};
-
-mkShell {
-  # Set UTF-8 local so that run-tests can parse GHC's unicode output.
-  LANG="C.UTF-8";
-
-  buildInputs = [
-    haskell.compiler.ghcLinearTypes20191220
-    nix
-    stack
-    cacert
-  ];
-}
-
-
+let
+  hsPkgs = import ./default.nix {};
+in
+  hsPkgs.linear-base.components.all
